@@ -32,8 +32,8 @@ The scripts expect the repository at `$SE_ROOT` (default `/opt/alphaco`); this p
 and is replaced by `$SE_ROOT` when a campaign is created.
 
 1. Edit `cluster/env.sh` and the `#SBATCH` lines of `cluster/*.sbatch` (`<partition>`, `<qos>`) for your cluster.
-2. Put the starting version of the solver where the task file expects it (`upstream` in `fw/tasks/<problem>_*.json`),
-   for example the `original/` folder of the solver's repository above.
+2. Put the starting version of the solver (the host's source, with the command-line interface that
+   `fw/problems/<problem>.py` describes) where the task file expects it (`upstream` in `fw/tasks/<problem>_*.json`).
 3. Create the development instances with the generator of the problem and the evaluation tools the plug-in
    `fw/problems/<problem>.py` names.
 4. Start one job per agent, for example for the three agents of the vehicle-routing campaign:
