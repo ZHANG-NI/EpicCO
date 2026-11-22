@@ -1,0 +1,90 @@
+{
+ "problem": "wcol",
+ "upstream": "/opt/alphaco/upstream/wcol_host",
+ "src_subdirs": [
+  "code",
+  "ext"
+ ],
+ "src_files": [
+  "params.txt"
+ ],
+ "train_opts": {},
+ "seeds": [
+  1
+ ],
+ "batch_size": 16,
+ "active_batches": 2,
+ "budget_h": 12,
+ "model": "claude-opus-5-5",
+ "prompt": {
+  "problem_text": "Weighted vertex colouring. Given a graph whose vertices carry positive integer weights, give every vertex a colour so that no edge joins two vertices of the same colour. The COST of a colouring is the sum, over the colours used, of the LARGEST weight among the vertices of that colour; lower is better; the number of colours is free (with all weights equal this is the classical graph colouring problem). An instance file (`<name>.wcol`) has a line `p edge <n> <m>`, one line `n <vertex> <weight>` per vertex (vertices 1..n, numbered by decreasing weight) and one line `e <u> <v>` per edge. A solution file has n lines; line i is the colour (an integer from 0) of vertex i. The evaluation service re-reads the solution file with its own verifier: every vertex coloured, no edge inside a colour, cost recomputed (`python3 tools/problem.py verify <instance> <solution>` in your directory does the same)",
+  "solver_text": "a tree search over partial colourings: the vertices are coloured in their file order, one tree level per vertex; every round selects a branch by an upper-confidence rule on the statistics of earlier rounds, expands it by one node, completes the partial colouring (greedily, then by a LOCAL SEARCH that runs for a time proportional to the number of vertices), and feeds the cost back along the branch; branches that cannot beat the best colouring are cut. Open-source C++ in `code/` (`main.cpp` the options; `methods/` the tree search, the greedy completions, several local searches and the helper that picks one when more than one is listed; `representation/` graph, colouring, tree node, parameters; `utils/`), two small header libraries in `ext/` (option parsing, text formatting), and `params.txt` with the options the program is started with (which local search, how the rounds are simulated, the time of one local search = max(1, int(P_time x n) + O_time) whole seconds, the exploration coefficient)",
+  "time_text": "300 seconds of wall-clock time per instance, whatever its size; the program is given `--time_limit 297` and counts whole seconds",
+  "build_text": "`code/main.cpp` and every `code/*/*.cpp` compiled with `g++ -O3 -flto=auto -DNDEBUG -std=c++17 -w -Iext -Icode -DFMT_HEADER_ONLY` and linked with `-O3 -flto=auto -s`, after `params.txt` has been checked (lines `option value`; not problem, instance, rand_seed, time_limit, target, output_directory); then the launcher `solver` is written next to the binary; `python3 tools/problem.py build src bin` does exactly this in your directory",
+  "io_text": "`solver <instance file> <solution file> -t <seconds> -seed <int>`: the launcher writes the instance as `instances/reduced_wvcp/g.col` (edges) and `g.col.w` (one weight per line) into a working directory, starts the program in its `build/` sub-directory as `prog --problem wvcp --instance g --rand_seed <int> --time_limit <seconds - 3> --target 0 --output_directory <dir> --<each line of params.txt>`, and turns the LAST data line of the program's file `<dir>/g_<seed>.csv` (columns ..., nb_colors, penalty, score, colours joined by `:`) into the solution file; a termination signal lets the program finish its current step and write that line",
+  "class_text": "graphs with {lo} to {hi} vertices",
+  "size_text": "`--n` is the number of vertices (the service asks for sizes from {lo} to {hi}).",
+  "eval_minutes": "13"
+ },
+ "train_sizes": [
+  200,
+  300,
+  500,
+  500,
+  1000,
+  143,
+  238,
+  450,
+  1000,
+  1444
+ ],
+ "prompt_template": "enhance_blind6_wcol.md",
+ "v4": {
+  "base_seeds": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "cand_seeds": [
+   101,
+   102,
+   103,
+   104
+  ],
+  "cand_step": 4,
+  "max_seeds": 8,
+  "probe_seeds": [
+   101,
+   102,
+   103,
+   104
+  ],
+  "t_accept": 1.7,
+  "t_try": 0.5,
+  "t_stop": 0.0,
+  "screen_frac": 1,
+  "rule": "decrease2",
+  "rounds": 2,
+  "t_second": 0.6,
+  "paired": true,
+  "fresh_after_fail": true,
+  "probe_offset": 100,
+  "lazy_baseline": 1
+ },
+ "session_cap_s": 7200,
+ "island_text": "This project is one of three that improve the same solver in parallel, all three on the same training instances. YOURS is the main one: your committed version is the one that will be tested at the end. The two others are scouts: their committed versions are set to yours from time to time (at the start of one of their sessions, when you have committed something new), they are told to stay away from everything you have kept, dropped or are working on, and their role is to give you ideas you have not had. How it works for you:\n- `offers/` receives every change a scout commits: one directory per offer, with `change.diff` (the change alone), `after/` (the changed files in full) and `note.md` (what it is and what it measured). The scouts work on the same instances as you, each on its own line of versions (a recent version of yours - or the original solver early on - plus its own commits; `note.md` says which), so an offer's numbers are directly comparable with yours. Whatever you take from an offer goes through your own evaluations and your commit gate like any other change. Say in the evaluation note and in `NOTES.md` which offer it is (`offer S1_v2: ...`), what you decided and why.\n- An offer usually needs further work from you before it pays off on your version. It was developed and tuned on the scout's line of versions (`note.md` says what that line was: often an earlier version of yours), while your version may contain newer changes that interact with it: its parameters (rates, periods, sizes, thresholds), the place where it is applied and its share of the run time were chosen for another solver. So treat an offer as a starting point that you optimise, not as a patch that you accept or reject. When an offer does not pass as it is, adapt it to your version - re-tune its key parameters, change when or where it is applied, keep only the part that helps, combine it with what you already have - and measure again. Keep working on an offer until it pays off on your version, or until your measurements show why it cannot (for example: your version already does what it does, or a named interaction with one of your changes cancels it). Leaving an offer is the exception: `NOTES.md` must then give that reason, with every variant you tried and what each measured. A number of attempts is never a reason by itself, and one `probe` whose difference is within the noise is not a reason to leave an offer whose own measurement passed the gate. An offer that passes as it is can still be improved afterwards: look for that too. `offers/INDEX.md` (kept up to date by the service) lists the open offers with what you have measured on each so far and where the scout measured its effect (by instance size: test an offer on the instances it is meant for). Offers whose effect is established in the scout's project (they passed its first gate) are listed first: work on them in that order, before anything else - while one of them is open the service accepts no other declaration. Offers that passed there only through the second gate have an effect within the noise of the measurement: taking one of them up is your choice, and when none of the first group is open they compete for your time with your own ideas on their merits. An offer is closed by a commit of yours that contains it, or - when your measurements show why it cannot pay off on your version - by `python3 tools/ctl.py leave <offer> \"<that reason, with the variants you measured>\"`.\n- `REF_*.md` are briefs of the scouts: what each tried without keeping (do not try it again: it was measured on your instances) and what it is working on now (do not duplicate it; it will arrive as an offer if it succeeds).\n- Besides the offers, follow your own ideas.\n- Before you start on a new direction (before you write code for it), declare it: `python3 tools/ctl.py claim \"<one sentence>\"`. The answer gives the record of the other two projects: what each is working on now, what it declared earlier, what it kept, and what it tried and did not keep. If yours is the same idea as anything on that record, or a variant of it, do not start it: think of another and declare that one. (An offer is the exception: it is yours to take up.) One declaration at a time (a new one replaces the old one). The service refuses `probe` and `eval` until you have declared a direction, and again after every commit until you declare the next one. An offer you take up is declared in the same way (`claim \"offer S1_v2: ...\"`).",
+ "peers": [
+  "wcol_S1",
+  "wcol_S2"
+ ],
+ "role": "main",
+ "group": "wcol_i1",
+ "train_dir": "/opt/alphaco/data/wcol/none",
+ "bks": "/opt/alphaco/data/wcol/none.json",
+ "island_note": "its training instances are the same 10 instances as yours"
+}

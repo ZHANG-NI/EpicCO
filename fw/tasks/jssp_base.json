@@ -1,0 +1,76 @@
+{
+ "problem": "jssp",
+ "upstream": "/opt/alphaco/upstream/JSP",
+ "src_subdirs": [],
+ "src_files": [
+  "JSP.cpp"
+ ],
+ "train_opts": {},
+ "seeds": [
+  1
+ ],
+ "batch_size": 16,
+ "active_batches": 2,
+ "budget_h": 12,
+ "model": "claude-opus-5-5",
+ "prompt": {
+  "problem_text": "The job-shop scheduling problem: n jobs and m machines; every job is a fixed sequence of m operations, one on each machine, each with an integer duration; a machine processes one operation at a time, without interruption; minimise the makespan (the completion time of the last operation). An instance file gives n and m, then one line per job with m pairs `machine duration` (machines numbered from 0) in the order in which the job visits them. A solution file has `n m makespan` on its first line, then m lines: line k lists the jobs (numbered from 1) in the order in which machine k-1 processes them.",
+  "solver_text": "a tabu search for the job-shop problem (moves of operations on the critical path, estimated makespans, visited solutions recorded in hash tables, perturbation when the search stalls), open-source C++, one file `src/JSP.cpp`",
+  "time_text": "300 seconds of CPU time for every instance, whatever its size",
+  "build_text": "g++ -O3 -DNDEBUG -std=gnu++17 -w *.cpp -o solver   (run inside src/)",
+  "io_text": "`solver <instance file> <solution file> -t <seconds> -seed <int>`; it must write the solution file and print a `TRACE <seconds> <makespan>` line on standard output whenever its best makespan improves",
+  "class_text": "job-shop instances in which every job visits every machine exactly once, integer durations, with {lo} to {hi} operations (jobs x machines)",
+  "size_text": "`--n` is the number of operations (jobs x machines; the service asks for sizes from {lo} to {hi}).",
+  "eval_minutes": "10 to 20"
+ },
+ "train_sizes": [
+  300,
+  400,
+  600,
+  1000,
+  400,
+  600,
+  400,
+  450,
+  800,
+  1000
+ ],
+ "prompt_template": "enhance_blind6_jssp.md",
+ "v4": {
+  "base_seeds": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "cand_seeds": [
+   101,
+   102,
+   103,
+   104
+  ],
+  "cand_step": 4,
+  "max_seeds": 8,
+  "probe_seeds": [
+   101,
+   102,
+   103,
+   104
+  ],
+  "t_accept": 1.7,
+  "t_try": 0.5,
+  "t_stop": 0.0,
+  "screen_frac": 1,
+  "rule": "decrease2",
+  "rounds": 2,
+  "t_second": 0.6,
+  "paired": true
+ },
+ "session_cap_s": 7200,
+ "train_dir": "/opt/alphaco/data/jssp/none",
+ "bks": "/opt/alphaco/data/jssp/none.json"
+}

@@ -1,0 +1,93 @@
+{
+ "problem": "mwis",
+ "upstream": "/opt/alphaco/upstream/CHILS",
+ "src_subdirs": [
+  "src",
+  "include"
+ ],
+ "src_files": [
+  "LICENSE",
+  "params.txt"
+ ],
+ "train_opts": {},
+ "seeds": [
+  1
+ ],
+ "batch_size": 16,
+ "active_batches": 2,
+ "budget_h": 12,
+ "model": "claude-opus-5-5",
+ "prompt": {
+  "problem_text": "Maximum weight independent set: given an undirected graph whose vertices carry non-negative integer weights, choose a set of pairwise non-adjacent vertices of maximum total weight. An instance file is in the METIS graph format: the first line is `n m 10` (vertices, edges, the code for vertex weights), then one line per vertex with its weight followed by its neighbours (1-based; every edge is listed at both of its ends). A solution file lists the chosen vertices, one 1-based index per line. The evaluation service works with a COST that is minimised: cost = 10^15 / (total weight of the set), computed from the solution file after checking that no two chosen vertices are adjacent. Lower is better, and a cost difference of -0.1 % is a weight gain of 0.1 %.",
+  "solver_text": "an iterated local search that can keep several solutions at once and then alternates between improving each of them on the whole graph and on the subgraph of the vertices on which they differ; open-source C: the code is in `src/src/` and `src/include/`, and `src/params.txt` holds the program's own tuning options that the launcher passes to it (`-p` number of solutions, where 1 means the plain local search, `-s` seconds per alternation step, `-q` queue size; an empty file means the program's defaults, 16 solutions and 10 seconds); it starts as `an empty file`",
+  "time_text": "360 seconds of search for every instance, whatever its size (reading the instance file comes on top and is not counted, within a margin that grows with the file size)",
+  "build_text": "`gcc -std=gnu17 -O3 -march=native -I include -fopenmp -DNDEBUG` on every `.c` file of `src/src/` except the library wrapper (the one file that is not part of the command-line program), after which a launcher `solver` is written next to the binary; `python3 tools/problem.py build src bin` does exactly this in your directory",
+  "io_text": "`solver <instance file> <solution file> -t <seconds> -seed <int>`: the launcher starts the program on one thread as `-g <instance> -o <solution> -t <seconds> -r <seed> -c 1` plus the options of `src/params.txt`; the program must write the solution file and print its one result line (`name,vertices,edges,weight,time of the best solution,total time`) as the original does",
+  "class_text": "vertex-weighted graphs with {lo} to {hi} vertices",
+  "size_text": "`--n` is the number of vertices (the service asks for sizes from {lo} to {hi}).",
+  "eval_minutes": "20"
+ },
+ "train_sizes": [
+  1200,
+  6000,
+  14000,
+  25000,
+  45000,
+  85000,
+  130000,
+  180000,
+  250000,
+  320000
+ ],
+ "prompt_template": "enhance_blind6_mwis.md",
+ "v4": {
+  "base_seeds": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "cand_seeds": [
+   101,
+   102,
+   103,
+   104
+  ],
+  "cand_step": 4,
+  "max_seeds": 8,
+  "probe_seeds": [
+   101,
+   102,
+   103,
+   104
+  ],
+  "t_accept": 1.7,
+  "t_try": 0.5,
+  "t_stop": 0.0,
+  "screen_frac": 1,
+  "rule": "decrease2",
+  "rounds": 2,
+  "t_second": 0.6,
+  "paired": true,
+  "fresh_after_fail": true,
+  "seed_offset": 600
+ },
+ "session_cap_s": 7200,
+ "island_text": "This project is one of three that improve the same solver in parallel, all three on the same training instances. The MAIN project's solver is the one that will be tested at the end. Yours and one other are scouts: your role is to find ideas that neither of the other two projects has had. Your line of versions follows the main project: at the start of a session of yours the service may set your committed version to the main project's current one (announced in `NOTICES.md`; the work tree of your previous session is then kept in `before_sync/`), so that you work on the solver as it is now and not on an old one. Between two such moments your line is that version plus the changes you commit. How the three work together:\n- Every change you commit is sent to the main project as an offer, with what it measured here; it decides by itself what to do with it (take it, build on it, or leave it). So: one change per commit, and a commit note that says what the change is and why it should make the solver better in general.\n- `REF_*.md` are briefs of the two other projects (they appear once those projects have evaluated something, and are kept up to date): what each has kept, what it tried and did not keep, and what it is working on now. Nothing on them is for you to do: do not port or re-test what another project kept, do not retry what it dropped, do not duplicate what it is doing. Read the briefs before you choose an idea, and choose one that is on none of them. Your value is in the ideas that are different.\n- Before you start on a new direction (before you write code for it), declare it: `python3 tools/ctl.py claim \"<one sentence>\"`. The answer gives the record of the other two projects: what each is working on now, what it declared earlier, what it kept, and what it tried and did not keep. If yours is the same idea as anything on that record, or a variant of it, do not start it: think of another and declare that one. One declaration at a time (a new one replaces the old one). The service refuses `probe` and `eval` until you have declared a direction, and again after every commit until you declare the next one.",
+ "peers": [
+  "mwis_G1",
+  "mwis_S1"
+ ],
+ "role": "secondary",
+ "group": "mwis_i1",
+ "train_dir": "/opt/alphaco/data/mwis/none",
+ "bks": "/opt/alphaco/data/mwis/none.json",
+ "sync_main": true,
+ "island_note": "its training instances are the same ten graphs as yours",
+ "sync_max_skips": 0,
+ "sync_wait_s": 3000
+}

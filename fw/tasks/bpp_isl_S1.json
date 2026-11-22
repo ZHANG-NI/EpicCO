@@ -1,0 +1,101 @@
+{
+ "problem": "bpp2d",
+ "upstream": "/opt/alphaco/upstream/GDRR",
+ "src_subdirs": [
+  "src",
+  "benches"
+ ],
+ "src_files": [
+  "Cargo.toml",
+  "Cargo.lock",
+  "params.json",
+  "LICENSE"
+ ],
+ "train_opts": {},
+ "seeds": [
+  1
+ ],
+ "batch_size": 16,
+ "active_batches": 2,
+ "budget_h": 12,
+ "model": "claude-opus-5-5",
+ "prompt": {
+  "problem_text": "Two-dimensional bin packing with guillotine cuts: rectangular items are cut from rectangular bins; every cut goes from one edge of the piece being cut to the opposite edge, so a bin is divided by a tree of horizontal and vertical cuts. An instance gives one or more bin types (length, height, and how many are in stock - or unlimited) and the item types (length, height, demand). Every item must be cut, items may NOT be rotated, and a bin type may not be used more often than its stock. Minimise the total AREA of the bins used: that area is the cost of a solution (it can never be below the total item area). An instance file is JSON: `Objects` = the bin types (`Length`, `Height`, `Stock`, null = unlimited; the `Cost` field is not used), `Items` = the item types (`Length`, `Height`, `Demand`). A solution file is the JSON the solver writes: the instance plus `CuttingPatterns`, one entry per bin used, with `Object` (index of the bin type) and `Root`, a tree of nodes with `Length`, `Height`, `Type` (`Structure`, `Item` with the item index `Item`, or `Leftover`) and `Children`; the children of a node divide it by parallel edge-to-edge cuts.",
+  "solver_text": "a ruin-and-recreate local search for guillotine packing (it removes parts of the cutting trees, re-inserts the removed items guided by a valuation of the leftover pieces, and accepts by late-acceptance hill climbing), open-source Rust, a cargo crate: the code is in `src/src/`, and `src/params.json` holds the algorithm parameters that the launcher passes to it",
+  "time_text": "60 seconds of wall-clock time for every instance, whatever its size",
+  "build_text": "`cargo build --release --offline --bin gdrr_main` with the vendored crates (no other crate can be used), after which a launcher `solver` is written next to the binary; `python3 tools/problem.py build src bin` does exactly this in your directory",
+  "io_text": "`solver <instance file> <solution file> -t <seconds> -seed <int>`: the launcher writes the solver's configuration (time limit, seed, one thread, no rotation, bins valued by their area, plus every key of `src/params.json`) and starts the binary, which must write the solution file and print a `<complete>` line with `mat: <area>` on standard output whenever its best complete solution improves, as the original does",
+  "class_text": "2D guillotine bin packing instances with one to six bin types, limited or unlimited stock, and {lo} to {hi} items",
+  "size_text": "`--n` is the number of items (the service asks for sizes from {lo} to {hi}).",
+  "eval_minutes": "8 to 16"
+ },
+ "train_sizes": [
+  100,
+  100,
+  80,
+  100,
+  60,
+  80,
+  100,
+  60,
+  100,
+  50,
+  100,
+  200,
+  400,
+  100,
+  200,
+  300,
+  50,
+  500,
+  150,
+  100
+ ],
+ "prompt_template": "enhance_blind6_bpp2d.md",
+ "v4": {
+  "base_seeds": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "cand_seeds": [
+   101,
+   102,
+   103,
+   104
+  ],
+  "cand_step": 4,
+  "max_seeds": 8,
+  "probe_seeds": [
+   101,
+   102,
+   103,
+   104
+  ],
+  "t_accept": 1.7,
+  "t_try": 0.5,
+  "t_stop": 0.0,
+  "screen_frac": 1,
+  "rule": "decrease2",
+  "rounds": 2,
+  "t_second": 0.6,
+  "paired": true
+ },
+ "session_cap_s": 7200,
+ "island_text": "This project is one of three that improve the same solver in parallel, all three on the same training instances. The MAIN project's solver is the one that will be tested at the end. Yours and one other are scouts: your role is to find ideas that neither of the other two projects has had. Your line of versions follows the main project: at the start of a session of yours the service may set your committed version to the main project's current one (announced in `NOTICES.md`; the work tree of your previous session is then kept in `before_sync/`), so that you work on the solver as it is now and not on an old one. Between two such moments your line is that version plus the changes you commit. How the three work together:\n- Every change you commit is sent to the main project as an offer, with what it measured here; it decides by itself what to do with it (take it, build on it, or leave it). So: one change per commit, and a commit note that says what the change is and why it should make the solver better in general.\n- `REF_*.md` are briefs of the two other projects (they appear once those projects have evaluated something, and are kept up to date): what each has kept, what it tried and did not keep, and what it is working on now. Nothing on them is for you to do: do not port or re-test what another project kept, do not retry what it dropped, do not duplicate what it is doing. Read the briefs before you choose an idea, and choose one that is on none of them. Your value is in the ideas that are different.\n- Before you start on a new direction (before you write code for it), declare it: `python3 tools/ctl.py claim \"<one sentence>\"`. The answer gives the record of the other two projects: what each is working on now, what it declared earlier, what it kept, and what it tried and did not keep. If yours is the same idea as anything on that record, or a variant of it, do not start it: think of another and declare that one. One declaration at a time (a new one replaces the old one). The service refuses `probe` and `eval` until you have declared a direction, and again after every commit until you declare the next one.",
+ "peers": [
+  "bpp_G1",
+  "bpp_S2"
+ ],
+ "role": "secondary",
+ "group": "bpp_i1",
+ "train_dir": "/opt/alphaco/data/bpp2d/none",
+ "bks": "/opt/alphaco/data/bpp2d/none.json",
+ "sync_main": true,
+ "sync_max_skips": 0
+}

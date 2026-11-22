@@ -1,0 +1,93 @@
+{
+ "problem": "glass",
+ "upstream": "/opt/alphaco/upstream/glass_host",
+ "src_subdirs": [
+  "gc",
+  "benchtools",
+  "nlohmann"
+ ],
+ "src_files": [
+  "host_main.cpp",
+  "params.txt",
+  "LICENSE"
+ ],
+ "train_opts": {},
+ "seeds": [
+  1
+ ],
+ "batch_size": 16,
+ "active_batches": 2,
+ "budget_h": 12,
+ "model": "claude-opus-5-5",
+ "prompt": {
+  "problem_text": "Glass cutting: rectangular items of an order book are cut out of a sequence of identical large plates (6000 x 3210 mm, used in their given order) by guillotine cuts in three stages plus trimming: vertical 1-cuts through the whole plate (two consecutive 1-cuts are at least 100 and at most 3500 apart, waste and the final leftover excepted), horizontal 2-cuts through a strip (at least 100 apart, waste excepted), vertical 3-cuts, and at most one 4-cut in a piece obtained by a 3-cut (it separates an item from waste or two items); every piece of waste is at least 20 x 20. Items may be rotated by 90 degrees. The items come in STACKS: the items of a stack must be cut in the order of the stack (stacks are independent of each other). Every plate carries small DEFECTS (rectangles); no item may contain a defect and no cut may run through one. The COST is the waste: the area of the plates used - the last plate only up to its last 1-cut, what lies to the right of it is a reusable leftover - minus the area of the items (an integer, mm x mm; lower is better). An instance is three csv files: `<prefix>_batch.csv` (ITEM_ID;LENGTH_ITEM;WIDTH_ITEM;STACK;SEQUENCE), `<prefix>_defects.csv` (DEFECT_ID;PLATE_ID;X;Y;WIDTH;HEIGHT) and `global_param.csv` (plate size, number of plates, cut limits). A solution file is the csv of the cutting tree (PLATE_ID;NODE_ID;X;Y;WIDTH;HEIGHT;TYPE;CUT;PARENT; TYPE = item id, -1 waste, -2 branch, -3 leftover). The evaluation service passes every solution through the official checker of the problem (items, stack order, cut rules, defects) and recomputes the waste from it.",
+  "solver_text": "a tree search that builds a cutting plan by inserting one item after another (the branching scheme: where the next item may go, which cuts that implies, how defects are avoided, symmetry and dominance rules) and explores the tree with a restarting best-first search of bounded memory guided by a criterion on partial plans; open-source C++ in `src/gc/` (`lib/` = instance and branching scheme, `ub_*/` = the search drivers); `src/params.txt` holds one line, the search that runs and its options (start: `MBA* c 1 f 1.5`); `src/host_main.cpp` is the program's interface, not part of the solver",
+  "time_text": "180 seconds for every order book, whatever its size",
+  "build_text": "`g++ -std=gnu++14 -O3 -march=native -DNDEBUG -w -pthread -I. host_main.cpp gc/lib/*.cpp gc/ub_*/*.cpp -o prog` in `src/` (new `.cpp` files must lie in `gc/lib/` or in a directory `gc/ub_<name>/`), after `params.txt` has been checked (ONE line: a search name known to `host_main.cpp` - MBA*, BS, BSS, A*, DFS, DPA* - followed by pairs `<letter> <number>`); a launcher `solver` is then written next to the binary; `python3 tools/problem.py build src bin` does exactly this in your directory",
+  "io_text": "`solver <instance file> <solution file> -t <seconds> -seed <int>`: the launcher writes the csv files of the order book and starts the program as `prog <prefix> <seconds> <seed> <solution csv> \"<line of params.txt>\"`; the program must write the solution csv and print its one `RESULT ...` line as the original does",
+  "class_text": "order books with {lo} to {hi} items",
+  "size_text": "`--n` is the number of items (the service asks for sizes from {lo} to {hi}).",
+  "eval_minutes": "10"
+ },
+ "train_sizes": [
+  60,
+  105,
+  200,
+  300,
+  400,
+  575,
+  200,
+  300,
+  120,
+  200
+ ],
+ "prompt_template": "enhance_blind6_glass.md",
+ "v4": {
+  "base_seeds": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "cand_seeds": [
+   101,
+   102,
+   103,
+   104
+  ],
+  "cand_step": 4,
+  "max_seeds": 8,
+  "probe_seeds": [
+   101,
+   102,
+   103,
+   104
+  ],
+  "t_accept": 1.7,
+  "t_try": 0.5,
+  "t_stop": 0.0,
+  "screen_frac": 1,
+  "rule": "decrease2",
+  "rounds": 2,
+  "t_second": 0.6,
+  "paired": true,
+  "fresh_after_fail": true,
+  "probe_offset": 100,
+  "lazy_baseline": 1
+ },
+ "session_cap_s": 7200,
+ "island_text": "This project is one of three that improve the same solver in parallel, all three on the same training instances. YOURS is the main one: your committed version is the one that will be tested at the end. The two others are scouts: their committed versions are set to yours from time to time (at the start of one of their sessions, when you have committed something new), they are told to stay away from everything you have kept, dropped or are working on, and their role is to give you ideas you have not had. How it works for you:\n- `offers/` receives every change a scout commits: one directory per offer, with `change.diff` (the change alone), `after/` (the changed files in full) and `note.md` (what it is and what it measured). The scouts work on the same instances as you, each on its own line of versions (a recent version of yours - or the original solver early on - plus its own commits; `note.md` says which), so an offer's numbers are directly comparable with yours. Whatever you take from an offer goes through your own evaluations and your commit gate like any other change. Say in the evaluation note and in `NOTES.md` which offer it is (`offer S1_v2: ...`), what you decided and why.\n- An offer usually needs further work from you before it pays off on your version. It was developed and tuned on the scout's line of versions (`note.md` says what that line was: often an earlier version of yours), while your version may contain newer changes that interact with it: its parameters (rates, periods, sizes, thresholds), the place where it is applied and its share of the run time were chosen for another solver. So treat an offer as a starting point that you optimise, not as a patch that you accept or reject. When an offer does not pass as it is, adapt it to your version - re-tune its key parameters, change when or where it is applied, keep only the part that helps, combine it with what you already have - and measure again. Keep working on an offer until it pays off on your version, or until your measurements show why it cannot (for example: your version already does what it does, or a named interaction with one of your changes cancels it). Leaving an offer is the exception: `NOTES.md` must then give that reason, with every variant you tried and what each measured. A number of attempts is never a reason by itself, and one `probe` whose difference is within the noise is not a reason to leave an offer whose own measurement passed the gate. An offer that passes as it is can still be improved afterwards: look for that too. `offers/INDEX.md` (kept up to date by the service) lists the open offers with what you have measured on each so far and where the scout measured its effect (by instance size: test an offer on the instances it is meant for). Offers whose effect is established in the scout's project (they passed its first gate) are listed first: work on them in that order, before anything else - while one of them is open the service accepts no other declaration. Offers that passed there only through the second gate have an effect within the noise of the measurement: taking one of them up is your choice, and when none of the first group is open they compete for your time with your own ideas on their merits. An offer is closed by a commit of yours that contains it, or - when your measurements show why it cannot pay off on your version - by `python3 tools/ctl.py leave <offer> \"<that reason, with the variants you measured>\"`.\n- `REF_*.md` are briefs of the scouts: what each tried without keeping (do not try it again: it was measured on your instances) and what it is working on now (do not duplicate it; it will arrive as an offer if it succeeds).\n- Besides the offers, follow your own ideas.\n- Before you start on a new direction (before you write code for it), declare it: `python3 tools/ctl.py claim \"<one sentence>\"`. The answer gives the record of the other two projects: what each is working on now, what it declared earlier, what it kept, and what it tried and did not keep. If yours is the same idea as anything on that record, or a variant of it, do not start it: think of another and declare that one. (An offer is the exception: it is yours to take up.) One declaration at a time (a new one replaces the old one). The service refuses `probe` and `eval` until you have declared a direction, and again after every commit until you declare the next one. An offer you take up is declared in the same way (`claim \"offer S1_v2: ...\"`).",
+ "peers": [
+  "glass_S1",
+  "glass_S2"
+ ],
+ "role": "main",
+ "group": "glass_i1",
+ "train_dir": "/opt/alphaco/data/glass/none",
+ "bks": "/opt/alphaco/data/glass/none.json",
+ "island_note": "its training instances are the same 10 families of order books as yours"
+}

@@ -1,0 +1,87 @@
+{
+ "problem": "cvrp",
+ "upstream": "/opt/alphaco/upstream/HGS-CVRP",
+ "src_subdirs": [
+  "Program"
+ ],
+ "src_files": [
+  "LICENSE"
+ ],
+ "train_dir": "/opt/alphaco/data/cvrp/train",
+ "bks": "/opt/alphaco/data/cvrp/train_bks.json",
+ "train_opts": {
+  "round": 1
+ },
+ "seeds": [
+  1
+ ],
+ "batch_size": 16,
+ "active_batches": 2,
+ "budget_h": 12,
+ "model": "claude-opus-5-5",
+ "prompt": {
+  "problem_text": "The Capacitated Vehicle Routing Problem (CVRP): one depot, identical vehicles of capacity Q, every customer visited exactly once by one vehicle, minimise the total distance; the number of routes is free. An instance file gives the capacity, two-dimensional integer coordinates of the depot (node 1) and the customers, and the customers' demands; a distance is the Euclidean distance rounded to the nearest integer. A solution file has one `Route #k: c1 c2 ...` line per route with customers numbered 1..n (customer i is node i+1 of the instance file), then `Cost <value>`.",
+  "solver_text": "a hybrid genetic search for the CVRP, open-source C++, in `src/Program/`",
+  "time_text": "0.4 x n seconds of CPU time for an instance with n customers (40 s for n = 100, 400 s for n = 1000)",
+  "build_text": "g++ -O3 -DNDEBUG -std=gnu++17 -IProgram Program/*.cpp -o solver   (run inside src/)",
+  "io_text": "`solver <instance file> <solution file> -t <seconds> -seed <int> -round 1`; it must write the solution file and keep writing the search-progress file `<solution file>.PG.csv` (one line per new best solution)",
+  "eval_minutes": "7",
+  "class_text": "CVRP with integer Euclidean coordinates, integer customer demands between 1 and the capacity, one depot, a free number of routes and no other constraint, with {lo} to {hi} customers",
+  "size_text": "`--n` is the number of customers (the service asks for sizes across the public benchmark's range, {lo} to {hi})."
+ },
+ "train_sizes": [
+  100,
+  200,
+  500,
+  800,
+  1000,
+  100,
+  200,
+  500,
+  800,
+  1000
+ ],
+ "prompt_template": "enhance_blind6.md",
+ "v4": {
+  "base_seeds": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "cand_seeds": [
+   101,
+   102,
+   103,
+   104
+  ],
+  "cand_step": 4,
+  "max_seeds": 8,
+  "probe_seeds": [
+   101,
+   102,
+   103,
+   104
+  ],
+  "t_accept": 1.7,
+  "t_try": 0.5,
+  "t_stop": 0.0,
+  "screen_frac": 1,
+  "rule": "decrease2",
+  "rounds": 2,
+  "t_second": 0.6,
+  "paired": true
+ },
+ "session_cap_s": 7200,
+ "island_text": "This project is one of three that improve the same solver in parallel, all three on the same training instances. The MAIN project's solver is the one that will be tested at the end. Yours and one other are scouts: your role is to find ideas that neither of the other two projects has had. You keep your own line of versions (the original solver plus the changes you commit); nothing of the other projects is copied into it. How the three work together:\n- Every change you commit is sent to the main project as an offer, with what it measured here; it decides by itself what to do with it (take it, build on it, or leave it). So: one change per commit, and a commit note that says what the change is and why it should make the solver better in general.\n- `REF_*.md` are briefs of the two other projects (they appear once those projects have evaluated something, and are kept up to date): what each has kept, what it tried and did not keep, and what it is working on now. Nothing on them is for you to do: do not port or re-test what another project kept, do not retry what it dropped, do not duplicate what it is doing. Read the briefs before you choose an idea, and choose one that is on none of them. Your value is in the ideas that are different.\n- Before you start on a new direction (before you write code for it), declare it: `python3 tools/ctl.py claim \"<one sentence>\"`. The answer gives the record of the other two projects: what each is working on now, what it declared earlier, what it kept, and what it tried and did not keep. If yours is the same idea as anything on that record, or a variant of it, do not start it: think of another and declare that one. One declaration at a time (a new one replaces the old one). The service refuses `probe` and `eval` until you have declared a direction, and again after every commit until you declare the next one.",
+ "peers": [
+  "cvrp_G3",
+  "cvrp_S6"
+ ],
+ "role": "secondary",
+ "group": "cvrp_i3"
+}

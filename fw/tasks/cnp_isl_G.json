@@ -1,0 +1,88 @@
+{
+ "problem": "cnp",
+ "upstream": "/opt/alphaco/upstream/cnp_host",
+ "src_subdirs": [],
+ "src_files": [
+  "solver.cpp",
+  "host_main.cpp"
+ ],
+ "train_opts": {},
+ "seeds": [
+  1
+ ],
+ "batch_size": 16,
+ "active_batches": 2,
+ "budget_h": 12,
+ "model": "claude-opus-5-5",
+ "prompt": {
+  "problem_text": "Critical node problem: given an undirected graph and a number K, remove exactly K vertices so that the pairwise connectivity of what is left - the number of pairs of remaining vertices that are still joined by a path, i.e. the sum over the remaining connected components of |C| (|C| - 1) / 2 - is as small as possible. An instance file has the number of vertices n on its first line, then one line `v: neighbours` for every vertex 0..n-1 (every edge is listed at both of its ends), then a last line `K <k>`. A solution file lists the K removed vertices on its first line. The evaluation service recomputes the objective from the solution file after checking that exactly K different vertices are removed; that objective is the COST (an integer; lower is better).",
+  "solver_text": "a population-based search: a local search that exchanges a removed vertex with a vertex of a large component, a small population of solutions, and a recombination step that keeps removed the vertices the parent solutions agree on, solves the smaller instance that is left and expands the result; open-source C++ in one file, `src/solver.cpp`; `src/host_main.cpp` is the program's interface (arguments, seeding clock, output), not part of the solver",
+  "time_text": "300 seconds for every instance, whatever its size",
+  "build_text": "`g++ -std=gnu++17 -O3 -march=native -w host_main.cpp -o prog` in `src/` (`host_main.cpp` includes `solver.cpp`), after which a launcher `solver` is written next to the binary; `python3 tools/problem.py build src bin` does exactly this in your directory",
+  "io_text": "`solver <instance file> <solution file> -t <seconds> -seed <int>`: the launcher starts the program as `prog <instance> <seconds> <seed> <solution>`; the program must write the solution file (first line: the K removed vertices) and print its one `RESULT ...` line as the original does",
+  "class_text": "undirected graphs with {lo} to {hi} vertices",
+  "size_text": "`--n` is the number of vertices (the service asks for sizes from {lo} to {hi}).",
+  "eval_minutes": "11"
+ },
+ "train_sizes": [
+  2452,
+  3769,
+  1500,
+  3889,
+  9914,
+  3000,
+  8000,
+  2000,
+  5000,
+  12000
+ ],
+ "prompt_template": "enhance_blind6_cnp.md",
+ "v4": {
+  "base_seeds": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "cand_seeds": [
+   101,
+   102,
+   103,
+   104
+  ],
+  "cand_step": 4,
+  "max_seeds": 8,
+  "probe_seeds": [
+   101,
+   102,
+   103,
+   104
+  ],
+  "t_accept": 1.7,
+  "t_try": 0.5,
+  "t_stop": 0.0,
+  "screen_frac": 1,
+  "rule": "decrease2",
+  "rounds": 2,
+  "t_second": 0.6,
+  "paired": true,
+  "fresh_after_fail": true,
+  "probe_offset": 100,
+  "lazy_baseline": 1
+ },
+ "session_cap_s": 7200,
+ "island_text": "This project is one of three that improve the same solver in parallel, all three on the same training instances. YOURS is the main one: your committed version is the one that will be tested at the end. The two others are scouts: their committed versions are set to yours from time to time (at the start of one of their sessions, when you have committed something new), they are told to stay away from everything you have kept, dropped or are working on, and their role is to give you ideas you have not had. How it works for you:\n- `offers/` receives every change a scout commits: one directory per offer, with `change.diff` (the change alone), `after/` (the changed files in full) and `note.md` (what it is and what it measured). The scouts work on the same instances as you, each on its own line of versions (a recent version of yours - or the original solver early on - plus its own commits; `note.md` says which), so an offer's numbers are directly comparable with yours. Whatever you take from an offer goes through your own evaluations and your commit gate like any other change. Say in the evaluation note and in `NOTES.md` which offer it is (`offer S1_v2: ...`), what you decided and why.\n- An offer usually needs further work from you before it pays off on your version. It was developed and tuned on the scout's line of versions (`note.md` says what that line was: often an earlier version of yours), while your version may contain newer changes that interact with it: its parameters (rates, periods, sizes, thresholds), the place where it is applied and its share of the run time were chosen for another solver. So treat an offer as a starting point that you optimise, not as a patch that you accept or reject. When an offer does not pass as it is, adapt it to your version - re-tune its key parameters, change when or where it is applied, keep only the part that helps, combine it with what you already have - and measure again. Keep working on an offer until it pays off on your version, or until your measurements show why it cannot (for example: your version already does what it does, or a named interaction with one of your changes cancels it). Leaving an offer is the exception: `NOTES.md` must then give that reason, with every variant you tried and what each measured. A number of attempts is never a reason by itself, and one `probe` whose difference is within the noise is not a reason to leave an offer whose own measurement passed the gate. An offer that passes as it is can still be improved afterwards: look for that too. `offers/INDEX.md` (kept up to date by the service) lists the open offers with what you have measured on each so far and where the scout measured its effect (by instance size: test an offer on the instances it is meant for). Offers whose effect is established in the scout's project (they passed its first gate) are listed first: work on them in that order, before anything else - while one of them is open the service accepts no other declaration. Offers that passed there only through the second gate have an effect within the noise of the measurement: taking one of them up is your choice, and when none of the first group is open they compete for your time with your own ideas on their merits. An offer is closed by a commit of yours that contains it, or - when your measurements show why it cannot pay off on your version - by `python3 tools/ctl.py leave <offer> \"<that reason, with the variants you measured>\"`.\n- `REF_*.md` are briefs of the scouts: what each tried without keeping (do not try it again: it was measured on your instances) and what it is working on now (do not duplicate it; it will arrive as an offer if it succeeds).\n- Besides the offers, follow your own ideas.\n- Before you start on a new direction (before you write code for it), declare it: `python3 tools/ctl.py claim \"<one sentence>\"`. The answer gives the record of the other two projects: what each is working on now, what it declared earlier, what it kept, and what it tried and did not keep. If yours is the same idea as anything on that record, or a variant of it, do not start it: think of another and declare that one. (An offer is the exception: it is yours to take up.) One declaration at a time (a new one replaces the old one). The service refuses `probe` and `eval` until you have declared a direction, and again after every commit until you declare the next one. An offer you take up is declared in the same way (`claim \"offer S1_v2: ...\"`).",
+ "peers": [
+  "cnp_S1",
+  "cnp_S2"
+ ],
+ "role": "main",
+ "group": "cnp_i1",
+ "train_dir": "/opt/alphaco/data/cnp/none",
+ "bks": "/opt/alphaco/data/cnp/none.json",
+ "island_note": "its training instances are the same 10 graphs as yours"
+}
