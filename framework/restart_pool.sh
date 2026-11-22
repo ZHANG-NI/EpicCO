@@ -12,5 +12,5 @@ done
 JOB=$(python3 -c "import json;print(json.load(open('$SE/pool/pool.info'))['job'])")
 scancel "$JOB"
 sleep 5
-cd $SE && NEW=$(sbatch --parsable -p main -c 64 --mem=64G -t 7-00:00:00 -J se_pool -o $SE/logs/pool_%j.out --wrap "python3 $SE/fw/pool.py $SE/pool")
+cd $SE && NEW=$(sbatch --parsable -p main -c 64 --mem=64G -t 7-00:00:00 -J se_pool -o $SE/logs/pool_%j.out --wrap "python3 $SE/framework/pool.py $SE/pool")
 echo "$(date '+%F %T') pool restarted: old job $JOB, new job $NEW" >> $SE/logs/pool_restart.log

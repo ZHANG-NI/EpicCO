@@ -8,7 +8,7 @@
 #SBATCH --time=16:00:00
 #SBATCH --output=%x_%j.out
 # Extra evaluation cores for running campaigns:  sbatch cluster/helper.sbatch <camp> [<camp> ...]
-# The job's physical cores are split evenly between the named campaigns; for each one a pool worker (fw/pool.py with
+# The job's physical cores are split evenly between the named campaigns; for each one a pool worker (framework/pool.py with
 # SE_POOL_WORKER) serves that campaign's spool next to its own pool. Same node type as the arms (constraint cpu), so
 # a run takes the same time wherever it lands. A worker stops when its campaign's pool stops; unfinished runs go back
 # to the queue when this job is cancelled or times out.
@@ -22,13 +22,13 @@ N=$#
 T=$SE_ROOT/pools/_selftest_$SLURM_JOB_ID; mkdir -p $T
 python3 - "$T" <<'PY' || { echo "FAIL self-test: the helper does not attach to any campaign"; rm -rf "$T"; exit 1; }
 import json, os, subprocess, sys, time
-sys.path.insert(0, "fw")
+sys.path.insert(0, "framework")
 import poolclient
 T = sys.argv[1]
 aff = sorted(os.sched_getaffinity(0))
 half = aff[:len(aff) // 2]
-a = subprocess.Popen([sys.executable, "fw/pool.py", T], env=dict(os.environ, SE_POOL_EXCLUDE=",".join(map(str, aff[len(aff) // 2:]))))
-b = subprocess.Popen([sys.executable, "fw/pool.py", T], env=dict(os.environ, SE_POOL_WORKER="t", SE_POOL_EXCLUDE=",".join(map(str, half))))
+a = subprocess.Popen([sys.executable, "framework/pool.py", T], env=dict(os.environ, SE_POOL_EXCLUDE=",".join(map(str, aff[len(aff) // 2:]))))
+b = subprocess.Popen([sys.executable, "framework/pool.py", T], env=dict(os.environ, SE_POOL_WORKER="t", SE_POOL_EXCLUDE=",".join(map(str, half))))
 time.sleep(3)
 jobs = [{"cmd": ["bash", "-c", "sleep 1; echo %d" % i], "cwd": T, "timeout": 30, "stdout": "%s/o%d.txt" % (T, i)} for i in range(40)]
 t0 = time.time()
@@ -65,7 +65,7 @@ mine = [core for k, core in enumerate(cores) if k % n == i]
 print(",".join(str(c) for core in cores if core not in mine for c in core))
 PY
 )
-  SE_POOL_WORKER="$SLURM_JOB_ID" SE_POOL_EXCLUDE="$EXCL" python3 fw/pool.py "$P" > logs/helper_${CAMP}_$SLURM_JOB_ID.out 2>&1 &
+  SE_POOL_WORKER="$SLURM_JOB_ID" SE_POOL_EXCLUDE="$EXCL" python3 framework/pool.py "$P" > logs/helper_${CAMP}_$SLURM_JOB_ID.out 2>&1 &
   PIDS="$PIDS $!"
   echo "worker for $CAMP: pid $! (excluded CPUs: $EXCL)"
   i=$((i+1))

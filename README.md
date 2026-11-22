@@ -33,9 +33,9 @@ and is replaced by `$SE_ROOT` when a campaign is created.
 
 1. Edit `cluster/env.sh` and the `#SBATCH` lines of `cluster/*.sbatch` (`<partition>`, `<qos>`) for your cluster.
 2. Put the starting version of the solver (the host's source, with the command-line interface that
-   `fw/problems/<problem>.py` describes) where the task file expects it (`upstream` in `fw/tasks/<problem>_*.json`).
+   `framework/problems/<problem>.py` describes) where the task file expects it (`upstream` in `framework/tasks/<problem>_*.json`).
 3. Create the development instances with the generator of the problem and the evaluation tools the plug-in
-   `fw/problems/<problem>.py` names.
+   `framework/problems/<problem>.py` names.
 4. Start one job per agent, for example for the three agents of the vehicle-routing campaign:
 
    ```
@@ -46,4 +46,4 @@ and is replaced by `$SE_ROOT` when a campaign is created.
 
    The header of `cluster/arm.sbatch` lists the options. Every evaluation, accepted version and migration is
    recorded in `camp/<name>/priv/ledger.jsonl`, the accepted versions in `camp/<name>/priv/versions/`.
-5. Final test: `python3 fw/final_eval.py <spec.json>` (format in the file's header), then `fw/final_tables.py`.
+5. Final test: `python3 framework/final_eval.py <spec.json>` (format in the file's header), then `framework/final_tables.py`.

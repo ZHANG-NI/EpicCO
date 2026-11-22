@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """make_glass_seedset.py <families.json> --camp NAME [--overlap <dir of public .gfam files> [--seeds N]]
 Training set of the glass-cutting islands = FAMILIES of order books (the solver has no random number, so the seed of a
-run selects the generated instance of a family; see fw/problems/glass.py). Writes camp/NAME/priv/train/inst/<name>.gfam
+run selects the generated instance of a family; see framework/problems/glass.py). Writes camp/NAME/priv/train/inst/<name>.gfam
 (one recipe file per family), initial.json (the names) and recipe.json (the recipes with structural figures over the
 first 20 seeds). File work only.
 

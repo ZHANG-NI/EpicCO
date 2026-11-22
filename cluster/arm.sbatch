@@ -38,13 +38,13 @@ echo "project root $SE_ROOT | credentials ${SE_CRED:-$HOME/.claude/.credentials.
 
 mkdir -p "$SE_POOL" logs
 rm -f "$SE_POOL/STOP"
-python3 fw/pool.py "$SE_POOL" > logs/pool_${CAMP}_$SLURM_JOB_ID.out 2>&1 &
+python3 framework/pool.py "$SE_POOL" > logs/pool_${CAMP}_$SLURM_JOB_ID.out 2>&1 &
 POOL_PID=$!
 trap 'touch "$SE_POOL/STOP"; sleep 3; kill $POOL_PID 2>/dev/null' EXIT
 sleep 15
 cat "$SE_POOL/pool.hb" || { echo "pool did not start"; exit 1; }
 
-cd fw
+cd framework
 V4='v4={"base_seeds":[1,2],"cand_seeds":[11],"max_seeds":3,"t_accept":2.33,"t_try":1.0,"t_stop":0.5,"screen_frac":3}'
 if [ -n "$SE_WAIT_FOR" ]; then        # e.g. the campaign whose initial training set this one copies is being created by another job
   for i in $(seq 1 120); do [ -e "$SE_ROOT/$SE_WAIT_FOR" ] && break; sleep 5; done

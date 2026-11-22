@@ -27,7 +27,7 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(os.environ.get("SE_ROOT") or (Path.home() / "epicco"))
-sys.path.insert(0, str(ROOT / "fw"))
+sys.path.insert(0, str(ROOT / "framework"))
 from problems import wcol as P  # noqa: E402
 
 CAMP, SHAPES = sys.argv[1], json.loads(Path(sys.argv[2]).read_text())

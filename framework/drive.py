@@ -436,7 +436,7 @@ def main(camp_dir):
 
 
 if __name__ == "__main__":
-    # fw/HOLD: do not start yet (a framework update is being installed); when the file is removed, re-execute this
+    # framework/HOLD: do not start yet (a framework update is being installed); when the file is removed, re-execute this
     # script so that the code now on disk is the code that runs
     if (FW / "HOLD").exists():
         while (FW / "HOLD").exists():

@@ -12,7 +12,7 @@ import os
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / (os.environ.get("SE_FW") or "fw")))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / (os.environ.get("SE_FW") or "framework")))
 P = importlib.import_module("problems." + sys.argv[1])
 tr = sorted(Path(sys.argv[2]).rglob(P.INSTANCE_GLOB))
 te = []

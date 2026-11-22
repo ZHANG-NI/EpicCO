@@ -2,7 +2,7 @@
 # launch_arm.sh <campaign> <task.json> [setup_camp key=value ...]
 # Create a campaign, calibrate the original solver on its training set, then run the campaign driver.
 # If the file $SE/logs/WAIT_POOL_RESTART exists, first wait until restart_pool.sh has logged a restart newer than it.
-SE=${SE_ROOT:-/opt/epicco}; cd $SE/fw || exit 1
+SE=${SE_ROOT:-/opt/epicco}; cd $SE/framework || exit 1
 CAMP=$1; TASK=$2; shift 2
 if [ -f $SE/logs/WAIT_POOL_RESTART ]; then
   while [ ! $SE/logs/pool_restart.log -nt $SE/logs/WAIT_POOL_RESTART ]; do sleep 10; done
