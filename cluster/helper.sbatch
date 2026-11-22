@@ -12,7 +12,7 @@
 # SE_POOL_WORKER) serves that campaign's spool next to its own pool. Same node type as the arms (constraint cpu), so
 # a run takes the same time wherever it lands. A worker stops when its campaign's pool stops; unfinished runs go back
 # to the queue when this job is cancelled or times out.
-cd "${SE_ROOT:-$HOME/alphaco}" || exit 1
+cd "${SE_ROOT:-$HOME/epicco}" || exit 1
 . cluster/env.sh
 echo "$(date '+%F %T') helper job $SLURM_JOB_ID on $(hostname): $(grep -m1 'model name' /proc/cpuinfo | cut -d: -f2)"
 N=$#

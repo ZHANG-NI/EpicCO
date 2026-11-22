@@ -1,6 +1,6 @@
 {
  "problem": "mwis",
- "upstream": "/opt/alphaco/upstream/CHILS",
+ "upstream": "/opt/epicco/upstream/CHILS",
  "src_subdirs": [
   "src",
   "include"
@@ -75,6 +75,6 @@
   "paired": true
  },
  "session_cap_s": 7200,
- "train_dir": "/opt/alphaco/data/mwis/none",
- "bks": "/opt/alphaco/data/mwis/none.json"
+ "train_dir": "/opt/epicco/data/mwis/none",
+ "bks": "/opt/epicco/data/mwis/none.json"
 }

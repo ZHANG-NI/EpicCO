@@ -1,6 +1,6 @@
 {
  "problem": "glass",
- "upstream": "/opt/alphaco/upstream/glass_host",
+ "upstream": "/opt/epicco/upstream/glass_host",
  "src_subdirs": [
   "gc",
   "benchtools",
@@ -77,6 +77,6 @@
   "paired": true
  },
  "session_cap_s": 7200,
- "train_dir": "/opt/alphaco/data/glass/none",
- "bks": "/opt/alphaco/data/glass/none.json"
+ "train_dir": "/opt/epicco/data/glass/none",
+ "bks": "/opt/epicco/data/glass/none.json"
 }

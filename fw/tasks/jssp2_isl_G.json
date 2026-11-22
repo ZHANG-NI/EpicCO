@@ -1,6 +1,6 @@
 {
  "problem": "jssp",
- "upstream": "/opt/alphaco/upstream/JSP",
+ "upstream": "/opt/epicco/upstream/JSP",
  "src_subdirs": [],
  "src_files": [
   "JSP.cpp"
@@ -78,6 +78,6 @@
  ],
  "role": "main",
  "group": "jssp_i2",
- "train_dir": "/opt/alphaco/data/jssp/none",
- "bks": "/opt/alphaco/data/jssp/none.json"
+ "train_dir": "/opt/epicco/data/jssp/none",
+ "bks": "/opt/epicco/data/jssp/none.json"
 }

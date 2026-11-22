@@ -1,6 +1,6 @@
-# AlphaCO
+# EpicCO
 
-Framework of the paper **"AlphaCO: Evolving Frontier Solvers for Combinatorial Optimization with LLM Agents"**.
+Framework of the paper **"EpicCO: Evolving Frontier Solvers for Combinatorial Optimization with LLM Agents"**.
 
 ## Enhanced solvers
 
@@ -8,14 +8,14 @@ Each solver produced by the framework has its own repository:
 
 | Problem | Host solver | Repository |
 |---|---|---|
-| Capacitated Vehicle Routing | HGS-CVRP | [AlphaCO-CVRP](https://github.com/ZHANG-NI/AlphaCO-CVRP) |
-| Job-Shop Scheduling | the tabu search of Li, Hao and Wu (HTSFP) | [AlphaCO-JSSP](https://github.com/ZHANG-NI/AlphaCO-JSSP) |
-| Two-Dimensional Guillotine Bin Packing | GDRR | [AlphaCO-BinPacking](https://github.com/ZHANG-NI/AlphaCO-BinPacking) |
-| Weighted Vertex Coloring | MCTS + RedLS | [AlphaCO-VertexColoring](https://github.com/ZHANG-NI/AlphaCO-VertexColoring) |
-| Maximum-Weight Independent Set | CHILS | [AlphaCO-IndependentSet](https://github.com/ZHANG-NI/AlphaCO-IndependentSet) |
-| Critical Node Detection | IRMS | [AlphaCO-CriticalNodes](https://github.com/ZHANG-NI/AlphaCO-CriticalNodes) |
-| Glass Cutting | MBA* | [AlphaCO-GlassCutting](https://github.com/ZHANG-NI/AlphaCO-GlassCutting) |
-| Last-Mile Routing | the first-ranked approach of the challenge | [AlphaCO-LastMileRouting](https://github.com/ZHANG-NI/AlphaCO-LastMileRouting) |
+| Capacitated Vehicle Routing | HGS-CVRP | [EpicCO-CVRP](https://github.com/ZHANG-NI/EpicCO-CVRP) |
+| Job-Shop Scheduling | the tabu search of Li, Hao and Wu (HTSFP) | [EpicCO-JSSP](https://github.com/ZHANG-NI/EpicCO-JSSP) |
+| Two-Dimensional Guillotine Bin Packing | GDRR | [EpicCO-BinPacking](https://github.com/ZHANG-NI/EpicCO-BinPacking) |
+| Weighted Vertex Coloring | MCTS + RedLS | [EpicCO-VertexColoring](https://github.com/ZHANG-NI/EpicCO-VertexColoring) |
+| Maximum-Weight Independent Set | CHILS | [EpicCO-IndependentSet](https://github.com/ZHANG-NI/EpicCO-IndependentSet) |
+| Critical Node Detection | IRMS | [EpicCO-CriticalNodes](https://github.com/ZHANG-NI/EpicCO-CriticalNodes) |
+| Glass Cutting | MBA* | [EpicCO-GlassCutting](https://github.com/ZHANG-NI/EpicCO-GlassCutting) |
+| Last-Mile Routing | the first-ranked approach of the challenge | [EpicCO-LastMileRouting](https://github.com/ZHANG-NI/EpicCO-LastMileRouting) |
 
 ## Requirements
 
@@ -28,7 +28,7 @@ Each solver produced by the framework has its own repository:
 
 ## Running a campaign
 
-The scripts expect the repository at `$SE_ROOT` (default `/opt/alphaco`); this path also appears in the task files
+The scripts expect the repository at `$SE_ROOT` (default `/opt/epicco`); this path also appears in the task files
 and is replaced by `$SE_ROOT` when a campaign is created.
 
 1. Edit `cluster/env.sh` and the `#SBATCH` lines of `cluster/*.sbatch` (`<partition>`, `<qos>`) for your cluster.

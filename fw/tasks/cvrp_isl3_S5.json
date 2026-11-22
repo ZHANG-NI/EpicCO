@@ -1,14 +1,14 @@
 {
  "problem": "cvrp",
- "upstream": "/opt/alphaco/upstream/HGS-CVRP",
+ "upstream": "/opt/epicco/upstream/HGS-CVRP",
  "src_subdirs": [
   "Program"
  ],
  "src_files": [
   "LICENSE"
  ],
- "train_dir": "/opt/alphaco/data/cvrp/train",
- "bks": "/opt/alphaco/data/cvrp/train_bks.json",
+ "train_dir": "/opt/epicco/data/cvrp/train",
+ "bks": "/opt/epicco/data/cvrp/train_bks.json",
  "train_opts": {
   "round": 1
  },

@@ -1,6 +1,6 @@
 {
  "problem": "bpp2d",
- "upstream": "/opt/alphaco/upstream/GDRR",
+ "upstream": "/opt/epicco/upstream/GDRR",
  "src_subdirs": [
   "src",
   "benches"
@@ -94,6 +94,6 @@
  ],
  "role": "main",
  "group": "bpp_i1",
- "train_dir": "/opt/alphaco/data/bpp2d/none",
- "bks": "/opt/alphaco/data/bpp2d/none.json"
+ "train_dir": "/opt/epicco/data/bpp2d/none",
+ "bks": "/opt/epicco/data/bpp2d/none.json"
 }

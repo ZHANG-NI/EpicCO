@@ -1,6 +1,6 @@
 {
  "problem": "glass",
- "upstream": "/opt/alphaco/upstream/glass_host",
+ "upstream": "/opt/epicco/upstream/glass_host",
  "src_subdirs": [
   "gc",
   "benchtools",
@@ -88,8 +88,8 @@
  ],
  "role": "secondary",
  "group": "glass_i1",
- "train_dir": "/opt/alphaco/data/glass/none",
- "bks": "/opt/alphaco/data/glass/none.json",
+ "train_dir": "/opt/epicco/data/glass/none",
+ "bks": "/opt/epicco/data/glass/none.json",
  "sync_main": true,
  "island_note": "its training instances are the same 10 families of order books as yours",
  "sync_max_skips": 0,

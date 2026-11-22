@@ -15,7 +15,7 @@ SE = Path(jail.SE)
 
 
 def main():
-    name, task = sys.argv[1], json.loads(Path(sys.argv[2]).read_text().replace("/opt/alphaco", jail.SE))
+    name, task = sys.argv[1], json.loads(Path(sys.argv[2]).read_text().replace("/opt/epicco", jail.SE))
     for kv in sys.argv[3:]:
         k, v = kv.split("=", 1)
         try:

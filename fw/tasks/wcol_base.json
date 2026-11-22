@@ -1,6 +1,6 @@
 {
  "problem": "wcol",
- "upstream": "/opt/alphaco/upstream/wcol_host",
+ "upstream": "/opt/epicco/upstream/wcol_host",
  "src_subdirs": [
   "code",
   "ext"
@@ -74,6 +74,6 @@
   "paired": true
  },
  "session_cap_s": 7200,
- "train_dir": "/opt/alphaco/data/wcol/none",
- "bks": "/opt/alphaco/data/wcol/none.json"
+ "train_dir": "/opt/epicco/data/wcol/none",
+ "bks": "/opt/epicco/data/wcol/none.json"
 }

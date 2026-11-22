@@ -19,11 +19,11 @@ from pathlib import Path
 #   SE_HIDE          colon list of directories replaced by an empty one inside the jail
 #   SE_JAIL_PATH / SE_JAIL_LD   extra PATH / LD_LIBRARY_PATH inside the jail (compiler modules)
 #   SE_SESSION_CPUS  CPUs for agent sessions (inside a Slurm job that also holds the evaluation pool)
-SE = os.environ.get("SE_ROOT", "/opt/alphaco")
+SE = os.environ.get("SE_ROOT", "/opt/epicco")
 REAL_HOME = os.environ.get("SE_REAL_HOME", "/home/agent")
 HOST_HOME = os.path.expanduser("~")                 # where the real credentials file lives (unless SE_CRED names it)
 CRED_FILE = os.environ.get("SE_CRED") or (HOST_HOME + "/.claude/.credentials.json")
-TOOLCHAIN_REAL = os.environ.get("SE_TOOLCHAIN", "/opt/alphaco/toolchain")
+TOOLCHAIN_REAL = os.environ.get("SE_TOOLCHAIN", "/opt/epicco/toolchain")
 TOOLCHAIN_IN = os.environ.get("SE_TOOLCHAIN_IN", REAL_HOME + "/toolchain_env")
 HIDE = [d for d in os.environ.get("SE_HIDE", "/data:/home").split(":") if d]
 JAIL_PATH = os.environ.get("SE_JAIL_PATH", "")

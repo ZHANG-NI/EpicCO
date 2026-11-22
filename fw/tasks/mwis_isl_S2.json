@@ -1,6 +1,6 @@
 {
  "problem": "mwis",
- "upstream": "/opt/alphaco/upstream/CHILS",
+ "upstream": "/opt/epicco/upstream/CHILS",
  "src_subdirs": [
   "src",
   "include"
@@ -84,8 +84,8 @@
  ],
  "role": "secondary",
  "group": "mwis_i1",
- "train_dir": "/opt/alphaco/data/mwis/none",
- "bks": "/opt/alphaco/data/mwis/none.json",
+ "train_dir": "/opt/epicco/data/mwis/none",
+ "bks": "/opt/epicco/data/mwis/none.json",
  "sync_main": true,
  "island_note": "its training instances are the same ten graphs as yours",
  "sync_max_skips": 0,

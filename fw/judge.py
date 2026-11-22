@@ -120,7 +120,7 @@ class Judge:
         self.load_train()
         rp = self.priv / "fresh" / "ref.json"
         self.fref = json.loads(rp.read_text()) if rp.exists() else {}
-        self.toolbin = self.C.get("toolchain_bin") or os.environ.get("SE_TOOLCHAIN_BIN", "/opt/alphaco/toolchain/bin")
+        self.toolbin = self.C.get("toolchain_bin") or os.environ.get("SE_TOOLCHAIN_BIN", "/opt/epicco/toolchain/bin")
 
     def load_train(self):
         """(name, path, size) of the training instances; with a rotating training set, only the active ones."""

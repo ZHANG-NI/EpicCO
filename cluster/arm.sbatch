@@ -26,7 +26,7 @@
 # the existing campaign (e.g. budget_h=18). Inside a running job: `touch camp/<name>/RESTART` restarts driver and
 # judge with the code on disk; `touch camp/<name>/PAUSE` ends the session and the job, to be resumed later.
 CAMP=$1; shift
-cd "${SE_ROOT:-$HOME/alphaco}" || exit 1
+cd "${SE_ROOT:-$HOME/epicco}" || exit 1
 . cluster/env.sh
 eval "$(python3 cluster/cpus.py ${SE_SESSION_CORES:-1})"      # the QOS allows 32 CPUs per job = 16 physical cores: 15 for the pool, 1 for the session
 export SE_POOL="$SE_ROOT/pools/$CAMP"

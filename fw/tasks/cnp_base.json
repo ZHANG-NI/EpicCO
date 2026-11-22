@@ -1,6 +1,6 @@
 {
  "problem": "cnp",
- "upstream": "/opt/alphaco/upstream/cnp_host",
+ "upstream": "/opt/epicco/upstream/cnp_host",
  "src_subdirs": [],
  "src_files": [
   "solver.cpp",
@@ -72,6 +72,6 @@
   "paired": true
  },
  "session_cap_s": 7200,
- "train_dir": "/opt/alphaco/data/cnp/none",
- "bks": "/opt/alphaco/data/cnp/none.json"
+ "train_dir": "/opt/epicco/data/cnp/none",
+ "bks": "/opt/epicco/data/cnp/none.json"
 }

@@ -1,6 +1,6 @@
 {
  "problem": "lmr",
- "upstream": "/opt/alphaco/upstream/lmr_host",
+ "upstream": "/opt/epicco/upstream/lmr_host",
  "src_subdirs": [
   "scripts",
   "solver",
@@ -86,7 +86,7 @@
  ],
  "role": "main",
  "group": "lmr_i1",
- "train_dir": "/opt/alphaco/data/lmr/none",
- "bks": "/opt/alphaco/data/lmr/none.json",
+ "train_dir": "/opt/epicco/data/lmr/none",
+ "bks": "/opt/epicco/data/lmr/none.json",
  "island_note": "its training instances are the same 10 families of routes as yours"
 }

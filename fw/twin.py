@@ -409,7 +409,7 @@ class Twin:
         b = self.priv / "bin"
         if not (b / "solver").exists():
             env = dict(os.environ)
-            env["PATH"] = (self.C.get("toolchain_bin") or os.environ.get("SE_TOOLCHAIN_BIN", "/opt/alphaco/toolchain/bin")) + ":" + env.get("PATH", "")
+            env["PATH"] = (self.C.get("toolchain_bin") or os.environ.get("SE_TOOLCHAIN_BIN", "/opt/epicco/toolchain/bin")) + ":" + env.get("PATH", "")
             r = subprocess.run(["bash", "-c", self.P.BUILD, "build", str(b)], cwd=self.C["solver_tree"], env=env,
                                capture_output=True, text=True, timeout=900)
             if r.returncode != 0:

@@ -25,7 +25,7 @@ SE = Path(jail.SE)
 
 
 def main():
-    name, task = sys.argv[1], json.loads(Path(sys.argv[2]).read_text().replace("/opt/alphaco", jail.SE))
+    name, task = sys.argv[1], json.loads(Path(sys.argv[2]).read_text().replace("/opt/epicco", jail.SE))
     fresh = "--no-fresh" not in sys.argv
     for kv in sys.argv[3:]:
         if "=" in kv and not kv.startswith("--"):

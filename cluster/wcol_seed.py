@@ -26,7 +26,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-ROOT = Path(os.environ.get("SE_ROOT") or (Path.home() / "alphaco"))
+ROOT = Path(os.environ.get("SE_ROOT") or (Path.home() / "epicco"))
 sys.path.insert(0, str(ROOT / "fw"))
 from problems import wcol as P  # noqa: E402
 

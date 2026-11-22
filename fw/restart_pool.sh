@@ -2,7 +2,7 @@
 # restart_pool.sh [max_wait_s]: restart the pinned evaluation pool with the currently deployed pool.py at a moment
 # when it is idle (nothing running, nothing queued). The Slurm job is cancelled by its numeric id only. Jobs that were
 # running at the cancel (none, if idle) are re-queued by the new pool instance.
-SE=${SE_ROOT:-/opt/alphaco}; MAXW=${1:-3600}; T0=$(date +%s)
+SE=${SE_ROOT:-/opt/epicco}; MAXW=${1:-3600}; T0=$(date +%s)
 while true; do
   IDLE=$(python3 -c "import json,time;h=json.load(open('$SE/pool/pool.hb'));print(int(h['live']==0 and h['queued']==0 and time.time()-h['t']<30))" 2>/dev/null)
   [ "$IDLE" = "1" ] && [ -z "$(ls $SE/pool/queue $SE/pool/running 2>/dev/null | grep json)" ] && break

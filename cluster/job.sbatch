@@ -10,7 +10,7 @@
 # job.sbatch <script> [args ...]: run one of our own scripts (data preparation, packing, tables over large files) in
 # a job instead of on the login node. No pool, no solver session.
 #   sbatch -J se_prep --mem=200G cluster/job.sbatch cluster/mwis_prep.sh
-cd "${SE_ROOT:-$HOME/alphaco}" || exit 1
+cd "${SE_ROOT:-$HOME/epicco}" || exit 1
 . cluster/env.sh
 echo "$(date '+%F %T') job $SLURM_JOB_ID on $(hostname): $*"
 bash "$@"

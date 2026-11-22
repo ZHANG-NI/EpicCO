@@ -1,6 +1,6 @@
 {
  "problem": "wcol",
- "upstream": "/opt/alphaco/upstream/wcol_host",
+ "upstream": "/opt/epicco/upstream/wcol_host",
  "src_subdirs": [
   "code",
   "ext"
@@ -85,8 +85,8 @@
  ],
  "role": "secondary",
  "group": "wcol_i1",
- "train_dir": "/opt/alphaco/data/wcol/none",
- "bks": "/opt/alphaco/data/wcol/none.json",
+ "train_dir": "/opt/epicco/data/wcol/none",
+ "bks": "/opt/epicco/data/wcol/none.json",
  "sync_main": true,
  "island_note": "its training instances are the same 10 instances as yours",
  "sync_max_skips": 0,

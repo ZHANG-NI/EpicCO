@@ -2,8 +2,8 @@
 # Edit the block marked EDIT if the cluster differs from what is assumed here.
 
 # ── EDIT ────────────────────────────────────────────────────────────────────────────────────────────────────────────
-export SE_ROOT="${SE_ROOT:-$HOME/alphaco}"          # where the bundles were unpacked
-# ~/alphaco may be a symbolic link into the scratch file system (the home quota, shared with other
+export SE_ROOT="${SE_ROOT:-$HOME/epicco}"          # where the bundles were unpacked
+# ~/epicco may be a symbolic link into the scratch file system (the home quota, shared with other
 # projects, filled up and every job of the account died at its next write). Every process uses the PHYSICAL path.
 SE_ROOT="$(cd "$SE_ROOT" 2>/dev/null && pwd -P || echo "$SE_ROOT")"; export SE_ROOT
 SE_MODULES="${SE_MODULES-}"                               # compiler module(s) to load; empty = the system g++ (here: /usr/bin/g++ 11.5)

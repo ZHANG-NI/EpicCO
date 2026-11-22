@@ -25,7 +25,7 @@ FW = Path(__file__).resolve().parent
 sys.path.insert(0, str(FW))
 import poolclient   # noqa: E402
 
-SE = os.environ.get("SE_ROOT", "/opt/alphaco")
+SE = os.environ.get("SE_ROOT", "/opt/epicco")
 
 
 def stdout_trace(path):
@@ -67,7 +67,7 @@ def main():
             except Exception:
                 pass
     env = dict(os.environ)
-    env["PATH"] = (spec.get("toolchain_bin") or os.environ.get("SE_TOOLCHAIN_BIN", "/opt/alphaco/toolchain/bin")) + ":" + env.get("PATH", "")
+    env["PATH"] = (spec.get("toolchain_bin") or os.environ.get("SE_TOOLCHAIN_BIN", "/opt/epicco/toolchain/bin")) + ":" + env.get("PATH", "")
     arms = {}
     for name, a in spec["arms"].items():
         if "tree" in a:
